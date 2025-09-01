@@ -1,0 +1,23 @@
+{
+  "name": "Snusslutt",
+  "short_name": "Snusslutt",
+  "description": "Hold styr på snus-slutt: tid uten snus, penger spart, mål og milepæler. Offline-støtte.",
+  "start_url": ".",
+  "scope": ".",
+  "display": "standalone",
+  "background_color": "#0b1b13",
+  "theme_color": "#177a47",
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

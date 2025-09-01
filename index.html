@@ -1,0 +1,352 @@
+<!doctype html>
+<html lang="no">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+<meta name="theme-color" content="#177a47"/>
+<link rel="manifest" href="manifest.webmanifest"/>
+<title>Snusslutt</title>
+<style>
+  :root{
+    --bg:#0b1b13;
+    --card:#12261c;
+    --muted:#5fae86;
+    --accent:#177a47;
+    --text:#e9f7ef;
+    --sub:#bfead3;
+    --danger:#ff6868;
+    --radius:16px;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+    background:linear-gradient(180deg, #0b1b13, #0f1f18);
+    color:var(--text);
+    -webkit-font-smoothing:antialiased;
+    line-height:1.35;
+  }
+  .wrap{max-width:920px;margin:0 auto;padding:clamp(16px,2vw,24px)}
+  header{display:flex;align-items:center;gap:12px;margin:8px 0 16px}
+  .logo{width:44px;height:44px;border-radius:12px;background:#177a47 url('icons/icon-192.png') center/cover no-repeat;box-shadow:0 8px 24px rgba(23,122,71,.3)}
+  h1{font-size:clamp(22px,4vw,28px);margin:0}
+  .sub{color:var(--sub);font-size:.92rem}
+  .grid{display:grid;gap:16px;grid-template-columns:1fr; }
+  @media (min-width:680px){
+    .grid{grid-template-columns:1.2fr .8fr}
+  }
+  .card{background:rgba(18,38,28,.82); backdrop-filter: blur(10px); border:1px solid rgba(95,174,134,.18); border-radius:var(--radius); padding:16px; box-shadow:0 12px 30px rgba(0,0,0,.25)}
+  .row{display:grid; gap:10px; grid-template-columns:1fr 1fr}
+  .row3{display:grid; gap:10px; grid-template-columns:1fr 1fr 1fr}
+  label{font-size:.9rem;color:var(--sub)}
+  input, select{
+    width:100%;padding:12px 12px;border-radius:12px;border:1px solid rgba(95,174,134,.22);
+    background:#0f1f18;color:var(--text);outline:none;
+  }
+  input:focus{border-color:var(--muted);}
+  button{
+    background:var(--accent); color:white; border:none; padding:12px 14px;
+    border-radius:14px; font-weight:600; cursor:pointer; box-shadow:0 8px 20px rgba(23,122,71,.35);
+  }
+  button.ghost{background:transparent;border:1px solid rgba(95,174,134,.35); box-shadow:none; color:var(--sub)}
+  .kpi{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:10px}
+  .tile{background:#0e1c15;border:1px solid rgba(95,174,134,.18);border-radius:12px;padding:12px}
+  .tile h3{margin:0;font-size:.85rem;color:var(--sub)}
+  .tile .v{font-size:1.3rem;font-weight:700;margin-top:6px}
+  .big{font-size:clamp(28px,6vw,38px);font-weight:800;margin:10px 0}
+  .milestones{display:grid;gap:10px}
+  .ms{border-radius:12px;border:1px solid rgba(95,174,134,.18);padding:12px;background:#0e1c15}
+  .ms.done{border-color:#3ddc84;background:linear-gradient(180deg,#0f221a,#0e1c15)}
+  .ms h4{margin:0 0 4px;font-size:.98rem}
+  .ms p{margin:0;color:var(--sub);font-size:.92rem}
+  .pill{display:inline-flex;gap:8px;align-items:center;padding:6px 10px;background:#0f221a;border:1px solid rgba(95,174,134,.28);border-radius:999px;font-size:.85rem;color:var(--sub)}
+  .danger{color:#ffd2d2}
+  .footer{opacity:.7;font-size:.85rem;margin-top:18px}
+  .row > div{display:flex;flex-direction:column;gap:6px}
+  .actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+  .notice{background:#0f221a;border:1px dashed rgba(95,174,134,.4);padding:10px;border-radius:12px;color:var(--sub);font-size:.9rem}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="logo" aria-hidden="true"></div>
+    <div>
+      <h1>Snusslutt</h1>
+      <div class="sub">Din lille hjelpetjeneste for å slutte med snus – fungerer også offline.</div>
+    </div>
+  </header>
+
+  <div class="grid">
+    <section class="card">
+      <h2 style="margin:0 0 10px">Innstillinger</h2>
+      <div class="row">
+        <div>
+          <label for="quit">Når sluttet du?</label>
+          <input id="quit" type="datetime-local"/>
+        </div>
+        <div>
+          <label for="currency">Valuta</label>
+          <select id="currency">
+            <option value="NOK" selected>NOK</option>
+            <option value="SEK">SEK</option>
+            <option value="DKK">DKK</option>
+            <option value="EUR">EUR</option>
+          </select>
+        </div>
+      </div>
+      <div class="row3" style="margin-top:10px">
+        <div>
+          <label for="price">Pris pr. boks</label>
+          <input id="price" type="number" inputmode="decimal" min="0" step="0.5" placeholder="85"/>
+        </div>
+        <div>
+          <label for="per">Forbruk (bokser/uke)</label>
+          <input id="per" type="number" inputmode="decimal" min="0" step="0.1" placeholder="5"/>
+        </div>
+        <div>
+          <label for="goal">Mål (dager)</label>
+          <input id="goal" type="number" min="1" step="1" placeholder="30"/>
+        </div>
+      </div>
+      <div class="actions">
+        <button id="save">Lagre</button>
+        <button id="reset" class="ghost">Nullstill</button>
+        <button id="install" class="ghost" style="display:none">Installer app</button>
+        <span class="pill" id="status">Ikke lagret</span>
+      </div>
+      <div class="notice" style="margin-top:10px">
+        Tips: Legg til på hjemskjermen for app-følelse. På iPhone: Del → <em>Legg til på hjem-skjermen</em>. På Android/Chrome: Meny → <em>Installer app</em>.
+      </div>
+    </section>
+
+    <section class="card">
+      <h2 style="margin:0 0 10px">Din fremgang</h2>
+      <div class="pill" id="goalPill">Mål: <span id="goalDays">30</span> dager</div>
+      <div class="big" id="elapsed">0d 00:00:00</div>
+      <div class="kpi">
+        <div class="tile">
+          <h3>Penger spart</h3>
+          <div class="v"><span id="money">0</span> <span id="curr">NOK</span></div>
+        </div>
+        <div class="tile">
+          <h3>Snusfri dager</h3>
+          <div class="v" id="days">0</div>
+        </div>
+      </div>
+      <div class="kpi">
+        <div class="tile">
+          <h3>Per dag</h3>
+          <div class="v"><span id="perDay">0</span> <span id="curr2">NOK</span></div>
+        </div>
+        <div class="tile">
+          <h3>Til mål</h3>
+          <div class="v" id="toGoal">–</div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <section class="card" style="margin-top:16px">
+    <h2 style="margin:0 0 10px">Milepæler</h2>
+    <div class="milestones" id="milestones"></div>
+    <div class="footer">Helse-fakta her er generelle, ikke medisinske råd.</div>
+  </section>
+
+  <section class="card" style="margin-top:16px">
+    <h2 style="margin:0 0 10px">Notater & triggere</h2>
+    <div class="row">
+      <div style="grid-column:1/-1">
+        <label for="notes">Hva trigget lyst i dag? Hva funket?</label>
+        <textarea id="notes" rows="5" style="width:100%;padding:12px;border-radius:12px;border:1px solid rgba(95,174,134,.22);background:#0f1f18;color:var(--text)"></textarea>
+      </div>
+    </div>
+    <div class="actions">
+      <button id="saveNotes">Lagre notat</button>
+      <button id="exportNotes" class="ghost">Eksporter notater</button>
+    </div>
+  </section>
+
+  <div class="footer">© Snusslutt – lagrer lokalt på enheten din (ingen konto nødvendig).</div>
+</div>
+
+<script>
+// --- Storage helpers
+const store = {
+  get(){ try{return JSON.parse(localStorage.getItem("snusslutt")||"{}")}catch(e){return{}} },
+  set(v){ localStorage.setItem("snusslutt", JSON.stringify(v)); },
+  getNotes(){ return JSON.parse(localStorage.getItem("snusslutt_notes")||"[]"); },
+  setNotes(list){ localStorage.setItem("snusslutt_notes", JSON.stringify(list)); }
+};
+
+// --- Elements
+const el = (id)=>document.getElementById(id);
+const quit = el("quit"), price = el("price"), per = el("per"), currency = el("currency"), goal = el("goal");
+const statusPill = el("status"), goalDays = el("goalDays"), elapsed = el("elapsed"), money = el("money"), days = el("days");
+const perDay = el("perDay"), curr = el("curr"), curr2 = el("curr2"), toGoal = el("toGoal");
+const notes = el("notes");
+const btnSave = el("save"), btnReset = el("reset"), btnInstall = el("install"), btnSaveNotes = el("saveNotes"), btnExportNotes = el("exportNotes");
+
+// --- PWA install prompt
+let deferredPrompt = null;
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  btnInstall.style.display = 'inline-block';
+});
+btnInstall.addEventListener('click', async () => {
+  if (!deferredPrompt) return;
+  deferredPrompt.prompt();
+  await deferredPrompt.userChoice;
+  deferredPrompt = null;
+  btnInstall.style.display = 'none';
+});
+
+// --- Register service worker
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("./service-worker.js");
+  });
+}
+
+// --- Milestones (time from quit)
+const milestoneDefs = [
+  {label:"20 minutter",    ms: 20*60*1000,  text:"Puls og blodtrykk kan begynne å normaliseres."},
+  {label:"8 timer",        ms: 8*60*60*1000, text:"Nikotin i blodet synker betydelig."},
+  {label:"24 timer",       ms: 24*60*60*1000, text:"Risiko for hjertebelastning reduseres noe."},
+  {label:"3 dager",        ms: 3*24*60*60*1000, text:"Nikotin ute av kroppen – abstinens kan være på topp."},
+  {label:"1 uke",          ms: 7*24*60*60*1000, text:"Smak og lukt kan bedre seg."},
+  {label:"2 uker",         ms: 14*24*60*60*1000, text:"Kondis kan gradvis bedre seg."},
+  {label:"1 måned",        ms: 30*24*60*60*1000, text:"Bedre hudsirkulasjon og energi for mange."},
+  {label:"3 måneder",      ms: 90*24*60*60*1000, text:"Hoste/pust kan bedre seg om du også har røykt tidligere."},
+  {label:"6 måneder",      ms: 182*24*60*60*1000, text:"Mange har færre cravings og bedre vaner etablert."},
+  {label:"1 år",           ms: 365*24*60*60*1000, text:"Stort økonomisk kutt og tydeligere fordeler i hverdagen."}
+];
+
+function renderMilestones(since){
+  const wrap = document.getElementById("milestones");
+  wrap.innerHTML = "";
+  const now = Date.now();
+  milestoneDefs.forEach(ms => {
+    const due = since + ms.ms;
+    const done = now >= due;
+    const div = document.createElement("div");
+    div.className = "ms" + (done ? " done" : "");
+    const eta = !done ? timeLeft(due-now) : "Oppnådd";
+    div.innerHTML = `<h4>${ms.label}</h4>
+    <p>${ms.text}</p>
+    <p class="sub">${ done ? "🎉 Oppnådd" : "⏳ Gjenstår: " + eta }</p>`;
+    wrap.appendChild(div);
+  });
+}
+
+// --- Formatting
+function pad(n){return n.toString().padStart(2,"0")}
+function fmtMoney(n){ return (Math.round(n*100)/100).toLocaleString(undefined, {minimumFractionDigits:0, maximumFractionDigits:0}); }
+function timeLeft(ms){
+  const s = Math.max(0, Math.floor(ms/1000));
+  const d = Math.floor(s/86400);
+  const h = Math.floor((s%86400)/3600);
+  const m = Math.floor((s%3600)/60);
+  const ss = s%60;
+  return `${d}d ${pad(h)}:${pad(m)}:${pad(ss)}`;
+}
+
+// --- Logic
+function calc(){
+  const cfg = store.get();
+  if (!cfg.quit) return;
+  const since = new Date(cfg.quit).getTime();
+  const now = Date.now();
+  const seconds = Math.max(0, Math.floor((now - since)/1000));
+  const d = Math.floor(seconds/86400);
+  const h = Math.floor((seconds%86400)/3600);
+  const m = Math.floor((seconds%3600)/60);
+  const s = seconds%60;
+  elapsed.textContent = `${d}d ${pad(h)}:${pad(m)}:${pad(s)}`;
+  days.textContent = d.toString();
+
+  const perDayN = (cfg.price || 0) * (cfg.per || 0) / 7; // price * cans/week -> per day
+  perDay.textContent = fmtMoney(perDayN);
+  curr.textContent = cfg.currency || "NOK";
+  curr2.textContent = cfg.currency || "NOK";
+  const saved = perDayN * (seconds/86400);
+  money.textContent = fmtMoney(saved);
+
+  const goalDaysN = cfg.goal || 30;
+  goalDays.textContent = goalDaysN;
+  const goalMs = goalDaysN * 86400000;
+  const left = Math.max(0, goalMs - (now - since));
+  toGoal.textContent = timeLeft(left);
+
+  renderMilestones(since);
+}
+
+function load(){
+  const cfg = store.get();
+  if (cfg.quit) quit.value = cfg.quit.slice(0,16);
+  if (cfg.price!=null) price.value = cfg.price;
+  if (cfg.per!=null) per.value = cfg.per;
+  if (cfg.currency) currency.value = cfg.currency;
+  if (cfg.goal!=null) goal.value = cfg.goal;
+
+  statusPill.textContent = "Klar";
+  calc();
+
+  // notes
+  const list = store.getNotes();
+  notes.value = list.length ? list[list.length-1].text : "";
+}
+
+function save(){
+  const cfg = {
+    quit: quit.value ? new Date(quit.value).toISOString() : null,
+    price: Number(price.value || 0),
+    per: Number(per.value || 0),
+    currency: currency.value || "NOK",
+    goal: Number(goal.value || 30)
+  };
+  store.set(cfg);
+  statusPill.textContent = "Lagret";
+  calc();
+}
+
+function reset(){
+  localStorage.removeItem("snusslutt");
+  localStorage.removeItem("snusslutt_notes");
+  quit.value = ""; price.value = ""; per.value = ""; goal.value="";
+  notes.value = "";
+  statusPill.textContent = "Nullstilt";
+  calc();
+}
+
+btnSave.addEventListener("click", save);
+btnReset.addEventListener("click", reset);
+
+// live tick
+setInterval(calc, 1000);
+
+// notes
+btnSaveNotes.addEventListener("click", ()=>{
+  const list = store.getNotes();
+  list.push({ts:new Date().toISOString(), text: notes.value||""});
+  store.setNotes(list);
+  statusPill.textContent = "Notat lagret";
+});
+
+btnExportNotes.addEventListener("click", ()=>{
+  const list = store.getNotes();
+  const blob = new Blob([JSON.stringify(list, null, 2)], {type:"application/json"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "snusslutt-notater.json";
+  a.click();
+  URL.revokeObjectURL(url);
+});
+
+// initial
+load();
+</script>
+</body>
+</html>
