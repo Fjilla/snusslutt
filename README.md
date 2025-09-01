@@ -19,3 +19,6 @@ En enkel Progressive Web App du kan installere på mobil (Android/iOS) eller des
 
 ## Notat
 Helsepunktene er generelle motivasjons-milesteiner – ikke medisinske råd.
+---
+
+© Snusslutt – Laget av Fjilla
